@@ -1,0 +1,4 @@
+&joboptions
+  topofile = '/Volumes/arve/shared/datasets/ice'
+  floodloc = 'floodloc_global.txt'
+/
