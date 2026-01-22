@@ -9,7 +9,8 @@ FCFLAGS = -ffree-form -ffree-line-length-none -ftree-vectorize -Wall
 # and enter the path next to " --prefix    ->" on the line below
 
 # netcdf = /home/public/easybuild/software/netCDF-Fortran/4.6.1-gompi-2023a
-netcdf = /usr/local
+# netcdf = /usr/local
+netcdf = /work/kaplan_lab/easybuild/software/netCDF-Fortran/4.6.1-gompi-2024a
 
 # should not need to modify anything below this line
 
