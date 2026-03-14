@@ -1,0 +1,6 @@
+&joboptions
+  basefile  = '/home/terraces/datasets/topography/GEBCO/30c/gebco_2025_sub_ice.nc'
+  paleofile = '/home/terraces/datasets/paleogeography/ICE-7G/30c/ice_00060.nc'
+  landfracf = '/home/terraces/datasets/hydrography/G3WBM/classfrac_30c.nc'
+  floodloc  = 'floodloc_00060.txt'
+/

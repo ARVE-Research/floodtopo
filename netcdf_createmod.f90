@@ -9,15 +9,15 @@ contains
 subroutine netcdf_create(filename,lon,lat,pixel,ncid)
 
 use netcdf
-use utilitymod, only : i1,i2,i4,dp,status,handle_err
+use utilitymod, only : i1,i2,i4,sp,dp,status,handle_err
 
 implicit none
 
 ! parameters
 
-integer(i4), parameter :: default_chunk = 360
-integer(i2), parameter :: missing = -32768
-integer(i1), parameter :: missing_i1 = -128
+integer(i4), parameter :: default_chunk =    360
+integer(i2), parameter :: missing       = -32768
+real(sp),    parameter :: scale_factor  =      0.0001
 
 ! arguments
 
@@ -147,7 +147,7 @@ if (status/=nf90_noerr) call handle_err(status)
 
 ! ----
 
-status = nf90_def_var(ncid,'landf',nf90_byte,dimids,varid,chunksizes=chunks,deflate_level=1,shuffle=.true.)
+status = nf90_def_var(ncid,'landf',nf90_short,dimids,varid,chunksizes=chunks,deflate_level=1,shuffle=.true.)
 if (status/=nf90_noerr) call handle_err(status)
 
 status = nf90_put_att(ncid,varid,'long_name','fraction of the gridcell that is ice free land')
@@ -156,15 +156,18 @@ if (status/=nf90_noerr) call handle_err(status)
 status = nf90_put_att(ncid,varid,'units','fraction')
 if (status/=nf90_noerr) call handle_err(status)
 
-status = nf90_put_att(ncid,varid,'_FillValue',missing_i1)
+status = nf90_put_att(ncid,varid,'_FillValue',missing)
 if (status/=nf90_noerr) call handle_err(status)
 
-status = nf90_put_att(ncid,varid,'missing_value',missing_i1)
+status = nf90_put_att(ncid,varid,'missing_value',missing)
+if (status/=nf90_noerr) call handle_err(status)
+
+status = nf90_put_att(ncid,varid,'scale_factor',scale_factor)
 if (status/=nf90_noerr) call handle_err(status)
 
 ! ----
 
-status = nf90_def_var(ncid,'icef',nf90_byte,dimids,varid,chunksizes=chunks,deflate_level=1,shuffle=.true.)
+status = nf90_def_var(ncid,'icef',nf90_short,dimids,varid,chunksizes=chunks,deflate_level=1,shuffle=.true.)
 if (status/=nf90_noerr) call handle_err(status)
 
 status = nf90_put_att(ncid,varid,'long_name','fraction of the gridcell that is land ice')
@@ -173,15 +176,18 @@ if (status/=nf90_noerr) call handle_err(status)
 status = nf90_put_att(ncid,varid,'units','fraction')
 if (status/=nf90_noerr) call handle_err(status)
 
-status = nf90_put_att(ncid,varid,'_FillValue',missing_i1)
+status = nf90_put_att(ncid,varid,'_FillValue',missing)
 if (status/=nf90_noerr) call handle_err(status)
 
-status = nf90_put_att(ncid,varid,'missing_value',missing_i1)
+status = nf90_put_att(ncid,varid,'missing_value',missing)
+if (status/=nf90_noerr) call handle_err(status)
+
+status = nf90_put_att(ncid,varid,'scale_factor',scale_factor)
 if (status/=nf90_noerr) call handle_err(status)
 
 ! ----
 
-status = nf90_def_var(ncid,'waterf',nf90_byte,dimids,varid,chunksizes=chunks,deflate_level=1,shuffle=.true.)
+status = nf90_def_var(ncid,'waterf',nf90_short,dimids,varid,chunksizes=chunks,deflate_level=1,shuffle=.true.)
 if (status/=nf90_noerr) call handle_err(status)
 
 status = nf90_put_att(ncid,varid,'long_name','fraction of the gridcell that is water')
@@ -190,10 +196,13 @@ if (status/=nf90_noerr) call handle_err(status)
 status = nf90_put_att(ncid,varid,'units','fraction')
 if (status/=nf90_noerr) call handle_err(status)
 
-status = nf90_put_att(ncid,varid,'_FillValue',missing_i1)
+status = nf90_put_att(ncid,varid,'_FillValue',missing)
 if (status/=nf90_noerr) call handle_err(status)
 
-status = nf90_put_att(ncid,varid,'missing_value',missing_i1)
+status = nf90_put_att(ncid,varid,'missing_value',missing)
+if (status/=nf90_noerr) call handle_err(status)
+
+status = nf90_put_att(ncid,varid,'scale_factor',scale_factor)
 if (status/=nf90_noerr) call handle_err(status)
 
 ! ----

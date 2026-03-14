@@ -1,45 +1,44 @@
 module floodmod
 
+use iso_fortran_env
+
 implicit none
 
 public :: flood
 
+integer, parameter :: sp = real32
+
+type seedtype
+  integer  :: xloc
+  integer  :: yloc
+  real(sp) :: level
+end type seedtype
+
 contains
 
-!---------------------------------------------------------------------------------------------------
+! ---------------------------------------------------------------------------------------------------
 
-subroutine flood(dem,wet,seed)
+subroutine flood(seed,dem,wet)
 
 implicit none
 
-integer, parameter :: i2 = selected_int_kind(4)
+! arguments
 
-!arguments
-
-integer(i2), dimension(:,:), intent(in)    :: dem
-logical,     dimension(:,:), intent(inout) :: wet
-
-integer, dimension(3), intent(in) :: seed   !locations to seed with the specified flood elevation
+type(seedtype),           intent(in)    :: seed
+real(sp), dimension(:,:), intent(inout) :: dem
+logical,  dimension(:,:), intent(inout) :: wet
 
 !local variables
-
-! logical :: cont
 
 integer :: i
 integer :: a,b
 integer :: x,y
 
-! integer :: p
-! integer :: a,b,i,j
-! integer :: x,y,n
-
 integer :: xlen
 integer :: ylen
 integer :: qlen
 
-integer(i2) :: level  !flood elevation
-
-! character(60) :: statline
+real(sp) :: level  ! flood elevation
 
 integer, allocatable, dimension(:,:) :: queue
 
@@ -63,17 +62,17 @@ ylen = size(dem,dim=2)
 
 allocate(queue(xlen*ylen,2))
  
-x = seed(1)
-y = seed(2)
+x = seed%xloc
+y = seed%yloc
 
 wet(x,y) = .true.
 
-level = int(seed(3),i2)
+level = seed%level
 
-!if the level at the seed point has been specified as the thickness of the water column above
-!the deepest point in the modern bathymetry, calculate the relative level at this time period
+! if the level at the seed point has been specified as the thickness of the water column above
+! the deepest point in the modern bathymetry, calculate the relative level at this period
 
-if (level /= 0) level = level + dem(x,y)
+if (level /= 0.) level = level + dem(x,y)
 
 write(0,*)'using elevation:',level
 
@@ -81,7 +80,7 @@ write(0,*)'using elevation:',level
 !start with seed point
 
 qlen = 1
-queue(1,:) = [seed(1),seed(2)]
+queue(1,:) = [seed%xloc,seed%yloc]
 
 !neighborhood search
 
@@ -107,6 +106,8 @@ do
       qlen = qlen + 1
 
       wet(a,b) = .true.
+      dem(a,b) = level
+
       queue(qlen,:) = [a,b]
 
     end if
